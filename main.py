@@ -7,7 +7,7 @@ from typing import List
 import pytz
 import twitter
 from emoji import UNICODE_EMOJI
-from twitter import Status, User
+from twitter import Status, User, TwitterError
 from weasyprint import HTML, CSS
 
 from variables import STYLE
@@ -38,10 +38,14 @@ class TweetBrief:
         now = datetime.datetime.now(tz=pytz.utc)
         week_ago = now - datetime.timedelta(days=from_days)
         user_tweets = []
-        for status in cls.api.GetUserTimeline(user_id=user.id, exclude_replies=True):
-            created_at = datetime.datetime.strptime(status.created_at, '%a %b %d %X %z %Y')
-            if created_at > week_ago:
-                user_tweets.append(status)
+        try:
+            for status in cls.api.GetUserTimeline(user_id=user.id, exclude_replies=True):
+                created_at = datetime.datetime.strptime(status.created_at, '%a %b %d %X %z %Y')
+                if created_at > week_ago:
+                    user_tweets.append(status)
+        except TwitterError:
+            # Accounts that have protected tweets
+            print(f'Cannot get statuses for {user.screen_name}. Omitting.')
         return cls.sort_tweets_by_retweet_count(user_tweets)
 
     @classmethod

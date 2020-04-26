@@ -1,5 +1,7 @@
 #!/bin/bash
-
+set -o allexport
+source /code/.env
+set +o allexport
 if [[ -z "${BRIEF_PERIOD}" ]]; then
   DAY="1"
 else

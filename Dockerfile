@@ -9,6 +9,8 @@ WORKDIR /code
 COPY cron-job /etc/cron.d/cron-job
 RUN chmod 0644 /etc/cron.d/cron-job
 RUN crontab /etc/cron.d/cron-job
+RUN touch /var/log/cron.log
+CMD cron && tail -f /var/log/cron.log
 
 COPY requirements.txt /code/
 RUN pip3 install -r requirements.txt

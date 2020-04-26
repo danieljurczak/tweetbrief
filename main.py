@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import datetime
 import os
 from copy import copy
@@ -21,10 +22,11 @@ class TweetBrief:
 
     NUMBER_OF_LINES = 60
     LINE_LENGTH = 38
+    SINGLE_AUTHOR_MAX_TWEETS = os.environ.get('SINGLE_AUTHOR_MAX_TWEETS', 3)
 
     @staticmethod
     def get_filename() -> str:
-        return f"tweetbrief_{datetime.datetime.now(tz=pytz.utc).strftime('%Y%m%d')}.pdf"
+        return f"/output/tweetbrief_{datetime.datetime.now(tz=pytz.utc).strftime('%Y%m%d')}.pdf"
 
     @staticmethod
     def sort_tweets_by_retweet_count(tweets: List[Status]) -> List[Status]:
@@ -48,7 +50,7 @@ class TweetBrief:
         final_tweets = []
 
         for user in users:
-            final_tweets += cls.get_best_tweets_for_user(user, from_days)[:3]
+            final_tweets += cls.get_best_tweets_for_user(user, from_days)[:cls.SINGLE_AUTHOR_MAX_TWEETS]
 
         return cls.sort_tweets_by_retweet_count(final_tweets)
 
@@ -134,4 +136,5 @@ class TweetBrief:
 
 
 if __name__ == "__main__":
-    TweetBrief.run(os.environ['TARGET_USERNAME'], os.environ['BRIEF_PERIOD'])
+    TweetBrief.run(os.environ['TARGET_USERNAME'], int(os.environ.get('BRIEF_PERIOD', 1)))
+    print('Generated new TweetBrief')

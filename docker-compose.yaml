@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  tweetbrief:
+    privileged: true
+    image: tweetbrief
+    environment:
+      - BRIEF_PERIOD=7 # Generate brief for the last 7 days
+      - TARGET_USERNAME=Daniel68815087
+      - BOT_CONSUMER_KEY=oi2UsA3bDMwXqi0XOgmPAOlVQ
+      - BOT_CONSUMER_SECRET=esuQ86KWxVkmqoMJp13GY6g1zDwlaV0vGapu08ZZ769JlfPFAj
+      - BOT_TOKEN_KEY=1252960710587559936-lQOaH2y5Mh8TmKWogoN8rHt7C0EWmQ
+      - BOT_TOKEN_SECRET=r9SjHg3LwrHSwrf71qGeib5PWXrfCL0UsQXHmH2ego8Cs
+    volumes:
+      - /vols/dailybriefs:/output:rw
+    tty: true

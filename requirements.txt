@@ -1,0 +1,4 @@
+pytz==2019.3
+python-twitter==3.5
+emoji==0.5.4
+WeasyPrint==51
